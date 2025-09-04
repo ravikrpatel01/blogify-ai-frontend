@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   // Dummy blogs data
@@ -28,10 +29,20 @@ export default function HomePage() {
     },
   ]);
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#DBD8E3] flex flex-col">
       <Navbar />
-      <section className="flex px-10 py-8">
+      <section className="flex px-10 py-8 mt-[70px]">
         <div className="w-1/2 py-10">
           <div>
             <h2 className="text-4xl font-bold text-gray-700">
@@ -71,24 +82,41 @@ export default function HomePage() {
                 blogging.
               </li>
             </ul>
-            <p className="mt-8 text-xl text-gray-700 font-bold">
-              Create an account OR Login to start writing your own blogs! ✨
-            </p>
-            <div className="mt-4">
-              <a
-                href="/signup"
-                className="bg-blue-500 mr-3 text-amber-50 py-1.5 px-3 rounded-sm border cursor-pointer border-amber-50 text-[1rem]"
-              >
-                Create your Account
-              </a>
-              OR
-              <a
-                href="/login"
-                className="bg-blue-500 ml-3 text-amber-50 py-1.5 px-3 rounded-sm border cursor-pointer border-amber-50 text-[1rem]"
-              >
-                Sign In
-              </a>
-            </div>
+            {user ? (
+              <>
+                <p className="text-gray-700 mt-5 mb-3">
+                  Share your thoughts, ideas, and knowledge with the world.
+                  Start your journey today and
+                  inspire others with your words.
+                </p>
+                <div>
+                  <Link to="/create" className="bg-blue-500 mr-3 text-amber-50 py-1.5 px-3 rounded-sm border cursor-pointer border-amber-50 text-[1rem]">
+                    Start Writing
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="mt-8 text-xl text-gray-700 font-bold">
+                  Create an account OR Login to start writing your own blogs! ✨
+                </p>
+                <div className="mt-4">
+                  <a
+                    href="/signup"
+                    className="bg-blue-500 mr-3 text-amber-50 py-1.5 px-3 rounded-sm border cursor-pointer border-amber-50 text-[1rem]"
+                  >
+                    Create your Account
+                  </a>
+                  OR
+                  <a
+                    href="/login"
+                    className="bg-blue-500 ml-3 text-amber-50 py-1.5 px-3 rounded-sm border cursor-pointer border-amber-50 text-[1rem]"
+                  >
+                    Sign In
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="w-1/2">
